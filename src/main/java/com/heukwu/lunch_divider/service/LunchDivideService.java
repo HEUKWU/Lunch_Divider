@@ -5,6 +5,8 @@ import com.heukwu.lunch_divider.model.Person;
 import java.util.List;
 
 public interface LunchDivideService {
-    List<Person> getPeopleList(List<String> names);
-    String divideIntoGroup(List<Person> people, int groupCount);
+    List<Person> getPeopleList();
+    void deletePerson(Long id);
+    void addPerson(String name);
+    List<List<String>> divideIntoGroup(int groupCount);
 }

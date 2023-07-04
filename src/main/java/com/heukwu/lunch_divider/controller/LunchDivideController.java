@@ -1,13 +1,13 @@
 package com.heukwu.lunch_divider.controller;
 
+import com.heukwu.lunch_divider.dto.NameDto;
 import com.heukwu.lunch_divider.model.Person;
 import com.heukwu.lunch_divider.service.LunchDivideService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,15 +25,34 @@ public class LunchDivideController {
         return "index";
     }
 
-    @PostMapping("/divide")
-    public String divideIntoGroups(@RequestParam(required = false) List<String> checkNames, @RequestParam int groupCount, Model model) {
-        if (checkNames == null) {
-            model.addAttribute("result", "체크된 인원이 없습니다.");
-            return "index";
+    @GetMapping("/showPeople")
+    @ResponseBody
+    public List<Person> show() {
+        return lunchDivideService.getPeopleList();
+    }
+
+    @PostMapping("/addPerson")
+    public ResponseEntity<String> addPerson(@RequestBody NameDto name) {
+        String message = "등록 완료: " + name.getName();
+
+        try {
+            lunchDivideService.addPerson(name.getName());
+            return ResponseEntity.ok(message);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        List<Person> people = lunchDivideService.getPeopleList(checkNames);
-        String result = lunchDivideService.divideIntoGroup(people, groupCount);
-        model.addAttribute("result", result);
-        return "index";
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<String> deletePerson(@RequestParam Long id) {
+        System.out.println(id);
+        lunchDivideService.deletePerson(id);
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
+
+    @PostMapping("/divide")
+    @ResponseBody
+    public List<List<String>> divideIntoGroups(@RequestParam int groupCount) {
+        return lunchDivideService.divideIntoGroup(groupCount);
     }
 }

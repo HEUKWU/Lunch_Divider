@@ -1,122 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
-  <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <title>그룹 생성기</title>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .left-box {
+          border: 1px solid #ccc;
+          padding: 20px;
+          width: 400px;
+          flex: 1;
+        }
+
+        .right-box {
+          padding: 20px;
+          flex: 1;
+        }
+
+        .people-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .person-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .person-name {
+            flex: 1;
+            margin: 0;
+        }
+
+        .delete-btn {
+            flex-shrink: 0;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .delete-btn:focus {
+            outline: none;
+        }
+
+        .add-person-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .add-person-form input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .add-person-form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .add-person-form button:hover {
+            background-color: #45a049;
+        }
+
+        .add-person-form button:focus {
+            outline: none;
+        }
+
+        .group-count-label {
+            margin-top: 10px;
+        }
+
+        .group-count-input {
+            margin-top: 5px;
+        }
+
+        .create-group-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .create-group-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .create-group-btn:focus {
+            outline: none;
+        }
+
+    </style>
 </head>
 <body>
 <div class="container">
-  <h1>그룹 생성기</h1>
+    <div class="left-box">
+        <h1>그룹 생성기</h1>
 
-  <form action="/divide" method="post">
-    <button type="button" onclick="toggleCheckAll()">전체 선택</button><br>
-    <label>이름을 입력하세요</label><br>
-    <input value="정지호" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="정지호" checked><br>
+        <ul class="people-list" id="people">
+            <!--    <li class="person-item">-->
+            <!--      <p class="person-name">유영우</p>-->
+            <!--      <button class="delete-btn" onclick="delete_person('유영우')">삭제</button>-->
+            <!--    </li>-->
+            <!--    <li class="person-item">-->
+            <!--      <p class="person-name">유성근</p>-->
+            <!--      <button class="delete-btn" onclick="delete_person('유성근')">삭제</button>-->
+            <!--    </li>-->
+            <!--    <li class="person-item">-->
+            <!--      <p class="person-name">쒧뛟쀍</p>-->
+            <!--      <button class="delete-btn" onclick="delete_person('쒧뛟쀍')">삭제</button>-->
+            <!--    </li>-->
+        </ul>
 
-    <input value="이한근" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="이한근" checked><br>
+        <div class="add-person-form">
+            <input type="text" id="username" placeholder="이름">
+            <button onclick="addPerson()">인원 추가</button>
+        </div>
 
-    <input value="홍슬기" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="홍슬기" checked><br>
+        <label class="group-count-label" for="groupCount">그룹의 수를 입력하세요</label><br>
+        <input class="group-count-input" type="number" name="groupCount" id="groupCount" required><br>
 
-    <input value="박용건" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="박용건" checked><br>
+        <button class="create-group-btn" onclick="divideGroup()">그룹 생성</button>
 
-    <input value="이재석" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="이재석" checked><br>
+    </div>
 
-    <input value="지주영" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="지주영" checked><br>
-
-    <input value="김진원" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="김진원" checked><br>
-
-    <input value="김주희" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="김주희" checked><br>
-
-    <input value="윤지은" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="윤지은" checked><br>
-
-    <input value="이미현" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="이미현" checked><br>
-
-    <input value="이선영" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="이선영" checked><br>
-
-    <input value="황지호" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="황지호" checked><br>
-
-    <input value="하태연" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="하태연" checked><br>
-
-    <input value="전범석" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="전범석" checked><br>
-
-    <input value="한소중" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="한소중" checked><br>
-
-    <input value="김지안" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="김지안" checked><br>
-
-    <input value="박윤정" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="박윤정" checked><br>
-
-    <input value="이예원" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="이예원" checked><br>
-
-    <input value="송희연" type="text" name="names" required>
-    <input type="checkbox" name="checkNames" value="송희연" checked><br>
-
-    <div id="nameFields"></div>
-    <button type="button" onclick="addNewNameField()">인원추가</button><br>
-
-    <label for="groupCount">그룹의 수를 입력하세요</label><br>
-    <input type="number" name="groupCount" id="groupCount" required><br>
-
-    <button type="submit">그룹 생성</button>
-  </form>
-
-  <div th:utext="${result}"></div>
+    <div class="right-box">
+        <h1>결과</h1>
+        <div id="group"></div>
+    </div>
 </div>
 
 <script>
-  function toggleCheckAll() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const allChecked = checkboxes[0].checked;
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = !allChecked;
-    });
-  }
-
-  function addNewNameField() {
-    const nameFields = document.getElementById("nameFields");
-
-    const newFieldDiv = document.createElement("div");
-
-    const newField = document.createElement("input");
-    newField.type = "text";
-    newField.name = "names";
-    newField.required = true;
-
-    const newCheckbox = document.createElement("input");
-    newCheckbox.type = "checkbox";
-    newCheckbox.name = "checkNames";
-
-    newField.onchange = function () {
-      newCheckbox.value = newField.value;
+    window.onload = function () {
+        showPeople();
     };
 
-    const br = document.createElement("br");
+    function showPeople() {
+        $.ajax({
+            type: "GET",
+            url: "/showPeople",
+            data: {},
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    let id = response[i]['id'];
+                    let name = response[i]['name'];
+                    let temp_html =
+                        `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
+                      margin-bottom: 10px;
+                      border-bottom: 1px solid #ccc;
+                      padding: 5px;"><p style="flex: 1; margin: 0;">${name}</p>
+                      <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none;
+                        padding: 5px 10px;
+                        cursor: pointer;" onclick="delete_person('${id}')">삭제</button>
+                   </li>`;
+                    $('#people').append(temp_html);
+                }
+            },
+        });
+    }
 
-    newFieldDiv.appendChild(newField);
-    newFieldDiv.appendChild(newCheckbox);
-    newFieldDiv.appendChild(br);
+    function delete_person(id) {
+        let abf = confirm("삭제하시겠습니까?");
+        if (abf) {
+            $.ajax({
+                type: "POST",
+                url: "/delete",
+                data: {id: id},
+                success: function (response) {
+                    alert(response)
+                    window.location.reload();
+                }
+            });
+        }
+    }
 
-    nameFields.appendChild(newFieldDiv);
-  }
+    function addPerson() {
+        const username = document.getElementById("username").value;
 
+        // AJAX 요청
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/addPerson", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // 서버로부터 등록 완료 메시지를 받아서 알림창 띄우기
+                    const message = xhr.responseText;
+                    alert(message);
+                    window.location.reload();
+                } else {
+                    // 서버로부터 에러 메시지를 받아서 알림창 띄우기
+                    const errorMessage = xhr.responseText;
+                    alert(errorMessage);
+                }
+            }
+        };
+
+        // 데이터 전송
+        const data = JSON.stringify({name: username});
+        xhr.send(data);
+    }
+
+    function divideGroup() {
+        $('#group').empty();
+        $.ajax({
+            type: "POST",
+            url: "/divide",
+            data: {groupCount: $('#groupCount').val()},
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    let groupNumber = i + 1;
+                    let html = $('#group').append(`<h2>그룹${groupNumber}</h2>`);
+                    for (let j = 0; j < response[i].length; j++) {
+                      let name = response[i][j];
+                      html.append(`<span>${name}</span>`);
+                      if (j < response[i].length - 1) {
+                        html.append(`<span>, </span>`);
+                      }
+                    }
+                }
+            },
+          error: function () {
+            alert("유효한 개수를 입력하세요.");
+          },
+        });
+    }
 </script>
 </body>
 </html>
