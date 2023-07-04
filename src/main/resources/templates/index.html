@@ -6,11 +6,11 @@
 </head>
 <body>
 <div class="container">
-  <h1>Group Divider</h1>
+  <h1>그룹 생성기</h1>
 
   <form action="/divide" method="post">
     <button type="button" onclick="toggleCheckAll()">전체 선택</button><br>
-    <label>Enter people's names:</label><br>
+    <label>이름을 입력하세요</label><br>
     <input value="정지호" type="text" name="names" required>
     <input type="checkbox" name="checkNames" value="정지호" checked><br>
 
@@ -69,12 +69,12 @@
     <input type="checkbox" name="checkNames" value="송희연" checked><br>
 
     <div id="nameFields"></div>
-    <button type="button" onclick="addNewNameField()">Add Person</button><br>
+    <button type="button" onclick="addNewNameField()">인원추가</button><br>
 
-    <label for="groupCount">Enter the number of groups:</label><br>
+    <label for="groupCount">그룹의 수를 입력하세요</label><br>
     <input type="number" name="groupCount" id="groupCount" required><br>
 
-    <button type="submit">Divide into Groups</button>
+    <button type="submit">그룹 생성</button>
   </form>
 
   <div th:utext="${result}"></div>
