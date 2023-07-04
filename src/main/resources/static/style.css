@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+.container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 400px;
+    margin: 0 auto;
+}
+
+button {
+    margin-top: 10px;
+}
+
+#nameFields {
+    margin-top: 10px;
+}
+
+.nameFieldDiv {
+    margin-bottom: 5px;
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+  <h1>Group Divider</h1>
+
+  <form action="/divide" method="post">
+    <button type="button" onclick="toggleCheckAll()">전체 선택</button><br>
+    <label>Enter people's names:</label><br>
+    <input value="정지호" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="정지호" checked><br>
+
+    <input value="이한근" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="이한근" checked><br>
+
+    <input value="홍슬기" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="홍슬기" checked><br>
+
+    <input value="박용건" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="박용건" checked><br>
+
+    <input value="이재석" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="이재석" checked><br>
+
+    <input value="지주영" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="지주영" checked><br>
+
+    <input value="김진원" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="김진원" checked><br>
+
+    <input value="김주희" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="김주희" checked><br>
+
+    <input value="윤지은" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="윤지은" checked><br>
+
+    <input value="이미현" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="이미현" checked><br>
+
+    <input value="이선영" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="이선영" checked><br>
+
+    <input value="황지호" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="황지호" checked><br>
+
+    <input value="하태연" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="하태연" checked><br>
+
+    <input value="전범석" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="전범석" checked><br>
+
+    <input value="한소중" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="한소중" checked><br>
+
+    <input value="김지안" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="김지안" checked><br>
+
+    <input value="박윤정" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="박윤정" checked><br>
+
+    <input value="이예원" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="이예원" checked><br>
+
+    <input value="송희연" type="text" name="names" required>
+    <input type="checkbox" name="checkNames" value="송희연" checked><br>
+
+    <div id="nameFields"></div>
+    <button type="button" onclick="addNewNameField()">Add Person</button><br>
+
+    <label for="groupCount">Enter the number of groups:</label><br>
+    <input type="number" name="groupCount" id="groupCount" required><br>
+
+    <button type="submit">Divide into Groups</button>
+  </form>
+
+  <div th:utext="${result}"></div>
+</div>
+
+<script>
+  function toggleCheckAll() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const allChecked = checkboxes[0].checked;
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = !allChecked;
+    });
+  }
+
+  function addNewNameField() {
+    const nameFields = document.getElementById("nameFields");
+
+    const newFieldDiv = document.createElement("div");
+
+    const newField = document.createElement("input");
+    newField.type = "text";
+    newField.name = "names";
+    newField.required = true;
+
+    const newCheckbox = document.createElement("input");
+    newCheckbox.type = "checkbox";
+    newCheckbox.name = "checkNames";
+
+    newField.onchange = function () {
+      newCheckbox.value = newField.value;
+    };
+
+    const br = document.createElement("br");
+
+    newFieldDiv.appendChild(newField);
+    newFieldDiv.appendChild(newCheckbox);
+    newFieldDiv.appendChild(br);
+
+    nameFields.appendChild(newFieldDiv);
+  }
+
+</script>
+</body>
+</html>
