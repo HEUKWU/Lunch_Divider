@@ -125,18 +125,18 @@
         <h1>그룹 생성기</h1>
 
         <ul class="people-list" id="people">
-            <!--    <li class="person-item">-->
-            <!--      <p class="person-name">유영우</p>-->
-            <!--      <button class="delete-btn" onclick="delete_person('유영우')">삭제</button>-->
-            <!--    </li>-->
-            <!--    <li class="person-item">-->
-            <!--      <p class="person-name">유성근</p>-->
-            <!--      <button class="delete-btn" onclick="delete_person('유성근')">삭제</button>-->
-            <!--    </li>-->
-            <!--    <li class="person-item">-->
-            <!--      <p class="person-name">쒧뛟쀍</p>-->
-            <!--      <button class="delete-btn" onclick="delete_person('쒧뛟쀍')">삭제</button>-->
-            <!--    </li>-->
+<!--                <li class="person-item">-->
+<!--                    <input type="checkbox" checked><p class="person-name">유영우</p>-->
+<!--                  <button class="delete-btn" onclick="delete_person('유영우')">삭제</button>-->
+<!--                </li>-->
+<!--                <li class="person-item">-->
+<!--                  <p class="person-name">유성근</p>-->
+<!--                  <button class="delete-btn" onclick="delete_person('유성근')">삭제</button>-->
+<!--                </li>-->
+<!--                <li class="person-item">-->
+<!--                  <p class="person-name">쒧뛟쀍</p>-->
+<!--                  <button class="delete-btn" onclick="delete_person('쒧뛟쀍')">삭제</button>-->
+<!--                </li>-->
         </ul>
 
         <div class="add-person-form">
@@ -171,15 +171,29 @@
                 for (let i = 0; i < response.length; i++) {
                     let id = response[i]['id'];
                     let name = response[i]['name'];
-                    let temp_html =
-                        `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
+                    let isChecked = response[i]['checked'];
+                    let temp_html;
+                    if (isChecked) {
+                        temp_html =
+                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
                       margin-bottom: 10px;
                       border-bottom: 1px solid #ccc;
-                      padding: 5px;"><p style="flex: 1; margin: 0;">${name}</p>
+                      padding: 5px;"><input type="checkbox" checked onclick="unCheck(${id})"><p style="flex: 1; margin: 0;">${name}</p>
                       <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none;
                         padding: 5px 10px;
-                        cursor: pointer;" onclick="delete_person('${id}')">삭제</button>
+                        cursor: pointer;" onclick="delete_person(${id})">삭제</button>
                    </li>`;
+                    } else {
+                        temp_html =
+                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
+                      margin-bottom: 10px;
+                      border-bottom: 1px solid #ccc;
+                      padding: 5px;"><input type="checkbox" onclick="check(${id})"><p style="flex: 1; margin: 0;">${name}</p>
+                      <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none;
+                        padding: 5px 10px;
+                        cursor: pointer;" onclick="delete_person(${id})">삭제</button>
+                   </li>`;
+                    }
                     $('#people').append(temp_html);
                 }
             },
@@ -190,7 +204,7 @@
         let abf = confirm("삭제하시겠습니까?");
         if (abf) {
             $.ajax({
-                type: "POST",
+                type: "DELETE",
                 url: "/delete",
                 data: {id: id},
                 success: function (response) {
@@ -199,6 +213,30 @@
                 }
             });
         }
+    }
+
+    function check(id) {
+        $.ajax({
+            type: "PUT",
+            url: "/check",
+            data: {id: id},
+            success: function (response) {
+                console.log(response)
+                window.location.reload();
+            }
+        });
+    }
+
+    function unCheck(id) {
+        $.ajax({
+            type: "PUT",
+            url: "/un-check",
+            data: {id: id},
+            success: function (response) {
+                console.log(response)
+                window.location.reload();
+            }
+        });
     }
 
     function addPerson() {

@@ -43,11 +43,22 @@ public class LunchDivideController {
         }
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deletePerson(@RequestParam Long id) {
-        System.out.println(id);
         lunchDivideService.deletePerson(id);
         return ResponseEntity.ok("삭제되었습니다.");
+    }
+
+    @PutMapping("/check")
+    public ResponseEntity<String> check(@RequestParam Long id) {
+        lunchDivideService.checkPerson(id);
+        return ResponseEntity.ok("체크 설정");
+    }
+
+    @PutMapping("/un-check")
+    public ResponseEntity<String> unCheck(@RequestParam Long id) {
+        lunchDivideService.unCheckPerson(id);
+        return ResponseEntity.ok("체크 해제");
     }
 
     @PostMapping("/divide")

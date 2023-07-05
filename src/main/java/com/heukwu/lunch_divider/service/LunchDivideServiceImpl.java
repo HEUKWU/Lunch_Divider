@@ -3,6 +3,10 @@ package com.heukwu.lunch_divider.service;
 import com.heukwu.lunch_divider.model.Person;
 import com.heukwu.lunch_divider.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,10 +17,12 @@ import java.util.List;
 public class LunchDivideServiceImpl implements LunchDivideService {
 
     private final PersonRepository personRepository;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public LunchDivideServiceImpl(PersonRepository personRepository) {
+    public LunchDivideServiceImpl(PersonRepository personRepository, MongoTemplate mongoTemplate) {
         this.personRepository = personRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -30,6 +36,20 @@ public class LunchDivideServiceImpl implements LunchDivideService {
     }
 
     @Override
+    public void checkPerson(Long id) {
+        Query query = new Query().addCriteria(Criteria.where("_id").is(id));
+        Update update = new Update().set("isChecked", true);
+        mongoTemplate.updateFirst(query, update, Person.class);
+    }
+
+    @Override
+    public void unCheckPerson(Long id) {
+        Query query = new Query().addCriteria(Criteria.where("_id").is(id));
+        Update update = new Update().set("isChecked", false);
+        mongoTemplate.updateFirst(query, update, Person.class);
+    }
+
+    @Override
     public void addPerson(String name) {
         if (name.equals("")) {
             throw new IllegalStateException("이름을 입력해주세요.");
@@ -37,12 +57,12 @@ public class LunchDivideServiceImpl implements LunchDivideService {
         if (personRepository.findPersonByName(name).isPresent()) {
             throw new IllegalStateException("중복된 이름이 존재합니다.");
         }
-        personRepository.save(new Person(name));
+        personRepository.save(new Person(name, true));
     }
 
     @Override
     public List<List<String>> divideIntoGroup(int groupCount) {
-        List<Person> people = personRepository.findAll();
+        List<Person> people = personRepository.findByIsCheckedIsTrue();
         if (groupCount > people.size()) {
             throw new IllegalStateException("유효한 개수를 입력하세요.");
         }

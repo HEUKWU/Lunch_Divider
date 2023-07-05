@@ -15,11 +15,14 @@ public class Person {
 
     private String name;
 
+    private Boolean isChecked = true;
+
     public Person() {
     }
 
-    public Person(String name) {
+    public Person(String name, boolean isChecked) {
         this.name = name;
+        this.isChecked = isChecked;
     }
 
     public Long getId() {
@@ -38,4 +41,11 @@ public class Person {
         this.name = name;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked() {
+        isChecked = !isChecked;
+    }
 }
