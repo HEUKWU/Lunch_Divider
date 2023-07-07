@@ -20,11 +20,23 @@
           padding: 20px;
           width: 400px;
           flex: 1;
+            position: relative;
         }
 
         .right-box {
           padding: 20px;
           flex: 1;
+        }
+
+        #count {
+            position: absolute;
+            right: 23px;
+            top: 40px;
+        }
+
+        #count > p {
+            margin-bottom: 10px;
+            margin-top: 10px;
         }
 
         .people-list {
@@ -123,18 +135,19 @@
 <div class="container">
     <div class="left-box">
         <h1>그룹 생성기</h1>
-
+        <div id = "count">
+        </div>
         <ul class="people-list" id="people">
 <!--                <li class="person-item">-->
-<!--                    <input type="checkbox" checked><p class="person-name">유영우</p>-->
+<!--                    <input type="checkbox" checked name="people"><p class="person-name">유영우</p>-->
 <!--                  <button class="delete-btn" onclick="delete_person('유영우')">삭제</button>-->
 <!--                </li>-->
 <!--                <li class="person-item">-->
-<!--                  <p class="person-name">유성근</p>-->
+<!--                    <input type="checkbox" checked name="people"><p class="person-name">유성근</p>-->
 <!--                  <button class="delete-btn" onclick="delete_person('유성근')">삭제</button>-->
 <!--                </li>-->
 <!--                <li class="person-item">-->
-<!--                  <p class="person-name">쒧뛟쀍</p>-->
+<!--                    <input type="checkbox" name="people"><p class="person-name">쒧뛟쀍</p>-->
 <!--                  <button class="delete-btn" onclick="delete_person('쒧뛟쀍')">삭제</button>-->
 <!--                </li>-->
         </ul>
@@ -160,6 +173,7 @@
 <script>
     window.onload = function () {
         showPeople();
+        // updateCount();
     };
 
     function showPeople() {
@@ -168,37 +182,44 @@
             url: "/showPeople",
             data: {},
             success: function (response) {
+                let totalCount = response.length;
+                let checkedCount = 0;
                 for (let i = 0; i < response.length; i++) {
                     let id = response[i]['id'];
                     let name = response[i]['name'];
                     let isChecked = response[i]['checked'];
                     let temp_html;
                     if (isChecked) {
+                        checkedCount++;
                         temp_html =
-                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
-                      margin-bottom: 10px;
-                      border-bottom: 1px solid #ccc;
-                      padding: 5px;"><input type="checkbox" checked onclick="unCheck(${id})"><p style="flex: 1; margin: 0;">${name}</p>
-                      <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none;
-                        padding: 5px 10px;
-                        cursor: pointer;" onclick="delete_person(${id})">삭제</button>
-                   </li>`;
+                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding: 5px;">
+                                <input type="checkbox" name="people" checked onclick="unCheck(${id})"><p style="flex: 1; margin: 0;">${name}</p>
+                                <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer;" onclick="delete_person(${id})">삭제</button>
+                             </li>`;
                     } else {
                         temp_html =
-                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between;
-                      margin-bottom: 10px;
-                      border-bottom: 1px solid #ccc;
-                      padding: 5px;"><input type="checkbox" onclick="check(${id})"><p style="flex: 1; margin: 0;">${name}</p>
-                      <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none;
-                        padding: 5px 10px;
-                        cursor: pointer;" onclick="delete_person(${id})">삭제</button>
-                   </li>`;
+                            `<li style="list-style: none; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding: 5px;">
+                                <input type="checkbox" name="people" onclick="check(${id})"><p style="flex: 1; margin: 0;">${name}</p>
+                                <button style="flex-shrink: 0; background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer;" onclick="delete_person(${id})">삭제</button>
+                            </li>`;
                     }
                     $('#people').append(temp_html);
                 }
+                $('#count').append(`
+            <p id="totalCount">전체 인원: ${totalCount}</p>
+            <p id="checkedCount">참여 인원: ${checkedCount}</p>
+                `);
             },
         });
     }
+
+    // function updateCount() {
+    //     const totalCount = document.getElementById("people").getElementsByTagName("li").length;
+    //     document.getElementById("totalCount").innerText = totalCount;
+    //
+    //     const checkedCount = document.querySelectorAll('input[name="people"]:checked').length;
+    //     document.getElementById("checkedCount").innerText = checkedCount;
+    // }
 
     function delete_person(id) {
         let abf = confirm("삭제하시겠습니까?");
@@ -241,27 +262,22 @@
 
     function addPerson() {
         const username = document.getElementById("username").value;
-
-        // AJAX 요청
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/addPerson", true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    // 서버로부터 등록 완료 메시지를 받아서 알림창 띄우기
                     const message = xhr.responseText;
                     alert(message);
                     window.location.reload();
                 } else {
-                    // 서버로부터 에러 메시지를 받아서 알림창 띄우기
                     const errorMessage = xhr.responseText;
                     alert(errorMessage);
                 }
             }
         };
 
-        // 데이터 전송
         const data = JSON.stringify({name: username});
         xhr.send(data);
     }
